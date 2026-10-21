@@ -17,7 +17,7 @@ class Control_Gasto:
                     self.lista_gastos = datos["gastos"]
 
             except (json.JSONDecodeError, KeyError, TypeError):
-                print("El archivo esta dañado, se empezara con una lista vacia.")
+                print("El archivo esta dañado, se empezara desde cero.")
 
         if self._salario is None:
             self._salario = pedir_salario()
@@ -52,11 +52,12 @@ class Control_Gasto:
                 print("No has registrado ningun gasto todavia.")
                 break
 
+
             for indice, producto in enumerate(self.lista_gastos, start=1):
                 print(f"{indice} {producto['nombre']} - {producto['precio']}")
 
             try:
-                eliminar = int(input("Escribe el numero del producto que quieres eliminar: "))
+                eliminar = int(input("Escribe el numero del producto que quieres eliminar, si deseas cancelar escribe (0): "))
             except ValueError:
                 print("Solo puedes escribir numeros")
                 continue
@@ -65,6 +66,10 @@ class Control_Gasto:
                 self.lista_gastos.pop(eliminar -1)
                 self.guardar()
                 print("Producto eliminado.")
+                break
+
+            elif eliminar == 0:
+                print("Eliminación cancelada.")
                 break
                 
             else:
