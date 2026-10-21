@@ -16,7 +16,7 @@ class Control_Gasto:
                     self._salario = datos["salario"]
                     self.lista_gastos = datos["gastos"]
 
-            except json.JSONDecodeError:
+            except (json.JSONDecodeError, KeyError, TypeError):
                 print("El archivo esta dañado, se empezara con una lista vacia.")
 
         if self._salario is None:
