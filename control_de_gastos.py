@@ -2,23 +2,27 @@ import json
 import os
 
 class Control_Gasto:
-    def __init__(self, nombre, salario):
+    def __init__(self, nombre):
 
         self.nombre = nombre
-        self._salario = salario
+        self._salario = None
+        self.lista_gastos = []
 
         if os.path.exists("usuario_gastos.json"):
 
             try:
                 with open("usuario_gastos.json", "r", encoding="utf-8") as archivo:
-                    self.lista_gastos = json.load(archivo)
+                    datos = json.load(archivo)
+                    self._salario = datos["salario"]
+                    self.lista_gastos = datos["gastos"]
 
             except json.JSONDecodeError:
                 print("El archivo esta dañado, se empezara con una lista vacia.")
-                self.lista_gastos = []
 
-        else:
-            self.lista_gastos = []
+        if self._salario is None:
+            self._salario = pedir_salario()
+            self.guardar()
+            
 
     def registrar_gasto(self):
 
@@ -42,18 +46,29 @@ class Control_Gasto:
        
     def eliminar_gasto(self):
 
+        while True:
 
-        eliminar_producto = input("Escribe el nombre del producto que deseas eliminar: ").capitalize().strip()
-        for indice, gastos in enumerate(self.lista_gastos):
-            if  gastos["nombre"] == eliminar_producto:
-                self.lista_gastos.pop(indice)
+            if not self.lista_gastos:
+                print("No has registrado ningun gasto todavia.")
+                break
 
+            for indice, producto in enumerate(self.lista_gastos, start=1):
+                print(f"{indice} {producto['nombre']} - {producto['precio']}")
+
+            try:
+                eliminar = int(input("Escribe el numero del producto que quieres eliminar: "))
+            except ValueError:
+                print("Solo puedes escribir numeros")
+                continue
+
+            if 1 <= eliminar <= len(self.lista_gastos):
+                self.lista_gastos.pop(eliminar -1)
                 self.guardar()
                 print("Producto eliminado.")
                 break
-       
-        else:
-            print("Gasto no encontrado.")
+                
+            else:
+                print("Gasto no encontrado.\n")
             
        
     def mostrar_gastos(self):
@@ -64,7 +79,7 @@ class Control_Gasto:
         
         print("---Gastos---\n")
         for gastos in self.lista_gastos:
-            print(gastos)
+            print(f"Nombre: {gastos['nombre']} - Precio: {gastos['precio']}")
 
         total = sum(gastos["precio"] for gastos in self.lista_gastos)
 
@@ -73,15 +88,15 @@ class Control_Gasto:
         restante = self._salario - total
 
         print("\n---Otros---")
-        print(f"\nHas gastado un {porcentaje:.2f}% de 100%") 
+        print(f"\nHas gastado un {porcentaje:.2f}% de tu salario") 
         print(f"Total de todo lo que has gastado: {total}")
         print(f"Esto es lo que te queda: {restante}")
 
     
     def guardar(self):
-
+        datos = {"salario": self._salario, "gastos": self.lista_gastos}
         with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
-            json.dump(self.lista_gastos, archivo, indent=4, ensure_ascii=False)
+            json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
 def dolares_a_pesos():
     print("Vamos a cambiar de dolares a pesos colombianos")
@@ -143,9 +158,7 @@ def pedir_salario():
 
 
 nombre = input("Escribe tu nombre: ")
-salario = pedir_salario()
-
-persona = Control_Gasto(nombre, salario)
+persona = Control_Gasto(nombre)
     
 
 while True:
@@ -183,7 +196,7 @@ while True:
                 opcion_moneda = int(input("Escribe tu respuesta: "))
 
             except ValueError:
-                print("solo puedes escribir numeros.")
+                print("\nsolo puedes escribir numeros.")
                 continue
 
             if opcion_moneda == 1:
