@@ -103,6 +103,12 @@ class Control_Gasto:
         with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
+    def cambiar_salario(self):
+        print(f"Tu salario actual es {self._salario}")
+        self._salario = pedir_salario()
+        self.guardar()
+        print("Salario editado correctamente.")
+
 def dolares_a_pesos():
     print("Vamos a cambiar de dolares a pesos colombianos")
     while True:
@@ -173,7 +179,8 @@ while True:
     print("escribe (2): si quieres eliminar un gasto")
     print("escribe (3): si quieres ver tus gastos")
     print("escribe (4): si quieres cambiar de moneda")
-    print("escribe (5): si quieres salir del programa\n")
+    print("escribe (5): si quieres cambiar tu salario")
+    print("escribe (6): si quieres salir del programa\n")
 
     try:
         opcion = int(input("Escribe tu respuesta: "))
@@ -215,8 +222,11 @@ while True:
                 break
             else:
                 print("Respuesta incorrecta.")
-    
+
     elif opcion == 5:
+        persona.cambiar_salario()
+    
+    elif opcion == 6:
         print("Gracias por usar el programa.")
         break
 
