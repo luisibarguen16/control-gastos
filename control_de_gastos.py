@@ -2,9 +2,9 @@ import json
 import os
 
 class Control_Gasto:
-    def __init__(self, nombre):
+    def __init__(self):
 
-        self.nombre = nombre
+        self.nombre = None
         self._salario = None
         self.lista_gastos = []
 
@@ -15,27 +15,32 @@ class Control_Gasto:
                     datos = json.load(archivo)
                     self._salario = datos["salario"]
                     self.lista_gastos = datos["gastos"]
+                    self.nombre = datos.get("nombre")
 
             except (json.JSONDecodeError, KeyError, TypeError):
                 print("El archivo esta dañado, se empezara desde cero.")
 
+        if self.nombre is None:
+            self.nombre = pedir_nombre()
+            
         if self._salario is None:
             self._salario = pedir_salario()
-            self.guardar()
+        
+        self.guardar()
             
 
     def registrar_gasto(self):
 
 
-        nombre_producto = input("escribe el nombre del producto que compraste: ").capitalize().strip()
+        nombre_producto = input("Escribe el nombre del producto que compraste: ").capitalize().strip()
         try:
             precio_producto = float(input("Escribe el precio del producto: "))
         except ValueError:
-            print("Escribe un valor valido.")
+            print(f"{self.nombre} Escribe un valor valido.")
             return
         
         if precio_producto <= 0:
-            print(f"{self.nombre} Solo puedes agregar numeros mayores que (0).")
+            print("Solo puedes agregar numeros mayores que (0).")
             return
         
         dic_gastos = {"nombre": nombre_producto, "precio": precio_producto} 
@@ -79,7 +84,7 @@ class Control_Gasto:
     def mostrar_gastos(self):
 
         if not self.lista_gastos:
-            print("\nno has hecho ningún gasto.")
+            print("No has hecho ningún gasto.")
             return
         
         print("---Gastos---\n")
@@ -99,7 +104,7 @@ class Control_Gasto:
 
     
     def guardar(self):
-        datos = {"salario": self._salario, "gastos": self.lista_gastos}
+        datos = {"nombre": self.nombre,"salario": self._salario, "gastos": self.lista_gastos}
         with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
@@ -165,6 +170,18 @@ def pesos_a_dolares():
         except ValueError:
             print("Solo puedes escribir numeros.")
 
+def pedir_nombre():
+    while True:
+
+        nombre = input("Escribe tu nombre: ").strip().title()
+        if nombre == "":
+            print("Debes escribir algo.")
+        else:
+            print("Nombre guardado correctamente.")
+            return nombre
+
+
+
 
 def pedir_salario():
      while True:
@@ -184,8 +201,8 @@ def pedir_salario():
 
 
 
-nombre = input("Escribe tu nombre: ")
-persona = Control_Gasto(nombre)
+
+persona = Control_Gasto()
     
 
 while True:
