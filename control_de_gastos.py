@@ -104,10 +104,26 @@ class Control_Gasto:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
     def cambiar_salario(self):
-        print(f"Tu salario actual es {self._salario}")
-        self._salario = pedir_salario()
-        self.guardar()
-        print("Salario editado correctamente.")
+        while True:
+            try:
+                opcion_cambiar_salario = int(input("Escribe (0) si deseas cancelar, (1) para continuar: "))
+            except ValueError:
+                print("Debes escribir un valor valido.")
+                continue
+
+            if opcion_cambiar_salario == 0:
+                print("Cambio cancelado")
+                break
+
+            elif opcion_cambiar_salario == 1:
+                print(f"Tu salario actual es {self._salario}")
+                self._salario = pedir_salario()
+                self.guardar()
+                break
+                
+
+            else:
+                print("Respuesta invalida")
 
 def dolares_a_pesos():
     print("Vamos a cambiar de dolares a pesos colombianos")
