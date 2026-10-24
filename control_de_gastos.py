@@ -88,8 +88,12 @@ class Control_Gasto:
             return
         
         print("---Gastos---\n")
-        for gastos in self.lista_gastos:
-            print(f"Nombre: {gastos['nombre']} - Precio: {gastos['precio']}")
+
+        datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto["precio"], reverse=True)
+        for gasto in datos_ordenados:
+            print(f"Nombre: {gasto['nombre']} - precio: {gasto['precio']}")
+        
+    
 
         total = sum(gastos["precio"] for gastos in self.lista_gastos)
 
