@@ -27,6 +27,10 @@ class Control_Gasto:
             self._salario = pedir_salario()
         
         self.guardar()
+
+    @property
+    def total(self):
+        return sum(gastos["precio"] for gastos in self.lista_gastos)
             
 
     def registrar_gasto(self):
@@ -92,18 +96,13 @@ class Control_Gasto:
         datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto["precio"], reverse=True)
         for gasto in datos_ordenados:
             print(f"Nombre: {gasto['nombre']} - precio: {gasto['precio']}")
+
+        porcentaje = (self.total / self._salario) * 100
+        restante = self._salario - self.total
         
-    
-
-        total = sum(gastos["precio"] for gastos in self.lista_gastos)
-
-        
-        porcentaje = (total / self._salario) * 100
-        restante = self._salario - total
-
         print("\n---Otros---")
         print(f"\nHas gastado un {porcentaje:.2f}% de tu salario") 
-        print(f"Total de todo lo que has gastado: {total}")
+        print(f"Total de todo lo que has gastado: {self.total}")
         print(f"Esto es lo que te queda: {restante}")
 
     
