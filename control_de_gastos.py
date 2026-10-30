@@ -1,5 +1,13 @@
 import json
 import os
+from dataclasses import dataclass, asdict
+
+
+
+@dataclass
+class Gasto:
+    nombre: str
+    precio: float
 
 class Control_Gasto:
     def __init__(self):
@@ -14,7 +22,7 @@ class Control_Gasto:
                 with open("usuario_gastos.json", "r", encoding="utf-8") as archivo:
                     datos = json.load(archivo)
                     self._salario = datos["salario"]
-                    self.lista_gastos = datos["gastos"]
+                    self.lista_gastos = [Gasto(d["nombre"], d["precio"]) for d in datos["gastos"]]
                     self.nombre = datos.get("nombre")
 
             except (json.JSONDecodeError, KeyError, TypeError):
@@ -30,7 +38,7 @@ class Control_Gasto:
 
     @property
     def total(self):
-        return sum(gastos["precio"] for gastos in self.lista_gastos)
+        return sum(gastos.precio for gastos in self.lista_gastos)
             
 
     def registrar_gasto(self):
@@ -46,12 +54,10 @@ class Control_Gasto:
         if precio_producto <= 0:
             print("Solo puedes agregar numeros mayores que (0).")
             return
-        
-        dic_gastos = {"nombre": nombre_producto, "precio": precio_producto} 
-        self.lista_gastos.append(dic_gastos)
+        gasto = Gasto(nombre_producto, precio_producto)
+        self.lista_gastos.append(gasto)
         self.guardar()
                 
-
        
     def eliminar_gasto(self):
 
@@ -62,8 +68,8 @@ class Control_Gasto:
                 break
 
 
-            for indice, producto in enumerate(self.lista_gastos, start=1):
-                print(f"{indice} {producto['nombre']} - {producto['precio']}")
+            for indice, gastos in enumerate(self.lista_gastos, start=1):
+                print(f"{indice} {gastos.nombre} - {gastos.precio}")
 
             try:
                 eliminar = int(input("Escribe el numero del producto que quieres eliminar, si deseas cancelar escribe (0): "))
@@ -93,9 +99,9 @@ class Control_Gasto:
         
         print("---Gastos---\n")
 
-        datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto["precio"], reverse=True)
+        datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto.precio, reverse=True)
         for gasto in datos_ordenados:
-            print(f"Nombre: {gasto['nombre']} - precio: {gasto['precio']}")
+            print(f"Nombre: {gasto.nombre} - precio: {gasto.precio}")
 
         porcentaje = (self.total / self._salario) * 100
         restante = self._salario - self.total
@@ -107,7 +113,7 @@ class Control_Gasto:
 
     
     def guardar(self):
-        datos = {"nombre": self.nombre,"salario": self._salario, "gastos": self.lista_gastos}
+        datos = {"nombre": self.nombre,"salario": self._salario, "gastos": [asdict(gasto) for gasto in self.lista_gastos]}
         with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
@@ -182,7 +188,6 @@ def pedir_nombre():
         else:
             print("Nombre guardado correctamente.")
             return nombre
-
 
 
 
