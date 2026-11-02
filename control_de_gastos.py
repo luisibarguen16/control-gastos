@@ -103,7 +103,7 @@ class Control_Gasto:
 
         datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto.precio, reverse=True)
         for gasto in datos_ordenados:
-            print(f"Nombre: {gasto.nombre} - precio: {gasto.precio}")
+            print(f"Nombre: {gasto.nombre} - Precio: {gasto.precio} - Categoria: {gasto.categoria}")
 
         porcentaje = (self.total / self._salario) * 100
         restante = self._salario - self.total
