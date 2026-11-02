@@ -8,6 +8,7 @@ from dataclasses import dataclass, asdict
 class Gasto:
     nombre: str
     precio: float
+    categoria: str
 
 class Control_Gasto:
     def __init__(self):
@@ -22,7 +23,7 @@ class Control_Gasto:
                 with open("usuario_gastos.json", "r", encoding="utf-8") as archivo:
                     datos = json.load(archivo)
                     self._salario = datos["salario"]
-                    self.lista_gastos = [Gasto(d["nombre"], d["precio"]) for d in datos["gastos"]]
+                    self.lista_gastos = [Gasto(d["nombre"], d["precio"], d.get("categoria", "Sin categoria")) for d in datos["gastos"]]
                     self.nombre = datos.get("nombre")
 
             except (json.JSONDecodeError, KeyError, TypeError):
@@ -45,6 +46,7 @@ class Control_Gasto:
 
 
         nombre_producto = input("Escribe el nombre del producto que compraste: ").capitalize().strip()
+        categoria = input("Escribe la categoria de tu gasto: ").capitalize().strip()
         try:
             precio_producto = float(input("Escribe el precio del producto: "))
         except ValueError:
@@ -54,7 +56,7 @@ class Control_Gasto:
         if precio_producto <= 0:
             print("Solo puedes agregar numeros mayores que (0).")
             return
-        gasto = Gasto(nombre_producto, precio_producto)
+        gasto = Gasto(nombre_producto, precio_producto, categoria)
         self.lista_gastos.append(gasto)
         self.guardar()
                 
