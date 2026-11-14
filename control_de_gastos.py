@@ -13,7 +13,8 @@ class Gasto:
     fecha: str
 
 class Control_Gasto:
-    def __init__(self):
+    def __init__(self) -> None:
+        """Pide nombre, salario y los guarda."""
 
         self.nombre = None
         self._salario = None
@@ -40,12 +41,13 @@ class Control_Gasto:
         self.guardar()
 
     @property
-    def total(self):
+    def total(self) -> float:
+        """Devuelve el total de todos los precios."""
         return sum(gastos.precio for gastos in self.lista_gastos)
             
 
-    def registrar_gasto(self):
-
+    def registrar_gasto(self) -> None:
+        """Registra un gasto nuevo y lo guarda en el archivo."""
 
         nombre_producto = input("Escribe el nombre del producto que compraste: ").capitalize().strip()
         categoria = input("Escribe la categoria de tu gasto: ").capitalize().strip()
@@ -65,7 +67,8 @@ class Control_Gasto:
         self.guardar()
                 
        
-    def eliminar_gasto(self):
+    def eliminar_gasto(self) -> None:
+        """Elimina el producto elegido."""
 
         while True:
 
@@ -97,7 +100,8 @@ class Control_Gasto:
                 print("Gasto no encontrado.\n")
             
        
-    def mostrar_gastos(self):
+    def mostrar_gastos(self) -> None:
+        """Muestra todos los atributos de los productos, el porcentaje gastado, total de todo lo gastado, lo que queda."""
 
         if not self.lista_gastos:
             print("No has hecho ningún gasto.")
@@ -107,7 +111,7 @@ class Control_Gasto:
 
         datos_ordenados = sorted(self.lista_gastos, key=lambda gasto: gasto.precio, reverse=True)
         for gasto in datos_ordenados:
-            print(f"Nombre: {gasto.nombre} - Precio: {gasto.precio} - Categoria: {gasto.categoria} Fecha: {gasto.fecha}")
+            print(f"Nombre: {gasto.nombre} - Precio: {gasto.precio} - Categoria: {gasto.categoria} - Fecha: {gasto.fecha}")
 
         porcentaje = (self.total / self._salario) * 100
         restante = self._salario - self.total
@@ -118,12 +122,14 @@ class Control_Gasto:
         print(f"Esto es lo que te queda: {restante}")
 
     
-    def guardar(self):
+    def guardar(self) -> None:
+        """Guarda todo en un archivo json."""
         datos = {"nombre": self.nombre,"salario": self._salario, "gastos": [asdict(gasto) for gasto in self.lista_gastos]}
         with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
-    def cambiar_salario(self):
+    def cambiar_salario(self) -> None:
+        """Quita el salario viejo y guarda el nuevo salario."""
         while True:
             try:
                 opcion_cambiar_salario = int(input("Escribe (0) si deseas cancelar, (1) para continuar: "))
@@ -145,8 +151,10 @@ class Control_Gasto:
             else:
                 print("Respuesta invalida")
 
-def dolares_a_pesos():
+def dolares_a_pesos() -> float:
+    """Devuelve la cantidad de pesos."""
     print("Vamos a cambiar de dolares a pesos colombianos")
+    
     while True:
         try:
             num1 = float(input("Escribe el monto de dolares: "))
@@ -166,8 +174,10 @@ def dolares_a_pesos():
 
 
 
-def pesos_a_dolares():
+def pesos_a_dolares() -> float:
+    """Devuelve la cantidad de dolares."""
     print("Vamos a cambiar de pesos a dolares")
+
     while True:
         try:
             num1 = float(input("Escribe el monto de pesos colombianos: "))
@@ -185,7 +195,8 @@ def pesos_a_dolares():
         except ValueError:
             print("Solo puedes escribir numeros.")
 
-def pedir_nombre():
+def pedir_nombre() -> str:
+    """Devuelve el nombre del usuario."""
     while True:
 
         nombre = input("Escribe tu nombre: ").strip().title()
@@ -197,7 +208,8 @@ def pedir_nombre():
 
 
 
-def pedir_salario():
+def pedir_salario() -> float:
+     """Devuelve el salario del usuario."""
      while True:
             
         try:
