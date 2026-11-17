@@ -1,6 +1,7 @@
 usuario_gastos.json
-__pycahe__/
+__pycache__/
 practica_proyecto.py
 venv/
 respaldo.json
 registro.log
+test_practica.py
