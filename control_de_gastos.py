@@ -227,71 +227,71 @@ def pedir_salario() -> float:
 
 
 
-
-persona = Control_Gasto()
+if __name__ == "__main__":
+    persona = Control_Gasto()
     
 
-while True:
-    print("\n----Control de gastos----\n")
-    print("-Menú-")
-    print("escribe (1): si quieres agregar un gasto")
-    print("escribe (2): si quieres eliminar un gasto")
-    print("escribe (3): si quieres ver tus gastos")
-    print("escribe (4): si quieres cambiar de moneda")
-    print("escribe (5): si quieres cambiar tu salario")
-    print("escribe (6): si quieres salir del programa\n")
+    while True:
+        print("\n----Control de gastos----\n")
+        print("-Menú-")
+        print("escribe (1): si quieres agregar un gasto")
+        print("escribe (2): si quieres eliminar un gasto")
+        print("escribe (3): si quieres ver tus gastos")
+        print("escribe (4): si quieres cambiar de moneda")
+        print("escribe (5): si quieres cambiar tu salario")
+        print("escribe (6): si quieres salir del programa\n")
 
-    try:
-        opcion = int(input("Escribe tu respuesta: "))
+        try:
+            opcion = int(input("Escribe tu respuesta: "))
 
-    except ValueError:
-        print("No puedes escribir letras.")
-        continue
+        except ValueError:
+            print("No puedes escribir letras.")
+            continue
 
-    if opcion == 1:
-        persona.registrar_gasto()
+        if opcion == 1:
+            persona.registrar_gasto()
 
-    elif opcion == 2:
-        persona.eliminar_gasto()
+        elif opcion == 2:
+            persona.eliminar_gasto()
     
-    elif opcion == 3:
-        persona.mostrar_gastos()
+        elif opcion == 3:
+            persona.mostrar_gastos()
 
-    elif opcion == 4:
-        while True:
-            print("\nescribe (1): si quieres cambiar de dolares a pesos")
-            print("escribe (2): si quieres cambiar de pesos a dolares")
-            print("escribe (3): si quieres salir\n")
+        elif opcion == 4:
+            while True:
+                print("\nescribe (1): si quieres cambiar de dolares a pesos")
+                print("escribe (2): si quieres cambiar de pesos a dolares")
+                print("escribe (3): si quieres salir\n")
 
-            try:
-                opcion_moneda = int(input("Escribe tu respuesta: "))
+                try:
+                    opcion_moneda = int(input("Escribe tu respuesta: "))
 
-            except ValueError:
-                print("\nsolo puedes escribir numeros.")
-                continue
+                except ValueError:
+                    print("\nsolo puedes escribir numeros.")
+                    continue
 
-            if opcion_moneda == 1:
-                print(dolares_a_pesos())
+                if opcion_moneda == 1:
+                    print(dolares_a_pesos())
 
-            elif opcion_moneda == 2:
-                print(pesos_a_dolares())
+                elif opcion_moneda == 2:
+                    print(pesos_a_dolares())
     
-            elif opcion_moneda == 3:
-                print("Gracias por tu respuesta.")
-                break
-            else:
-                print("Respuesta incorrecta.")
+                elif opcion_moneda == 3:
+                    print("Gracias por tu respuesta.")
+                    break
+                else:
+                    print("Respuesta incorrecta.")
 
-    elif opcion == 5:
-        persona.cambiar_salario()
+        elif opcion == 5:
+            persona.cambiar_salario()
     
-    elif opcion == 6:
-        print("Gracias por usar el programa.")
-        break
+        elif opcion == 6:
+            print("Gracias por usar el programa.")
+            break
 
-    else:
-        print("Respuesta no válida.")
-        continue
+        else:
+            print("Respuesta no válida.")
+            continue
 
 
     

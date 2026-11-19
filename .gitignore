@@ -5,3 +5,5 @@ venv/
 respaldo.json
 registro.log
 test_practica.py
+validaciones.py
+test_validaciones.py
