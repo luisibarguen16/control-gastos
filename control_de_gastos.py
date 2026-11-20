@@ -13,21 +13,28 @@ class Gasto:
     fecha: str
 
 class Control_Gasto:
-    def __init__(self) -> None:
+    def __init__(self, nombre=None, salario=None, archivo="usuario_gastos.json") -> None:
         """Pide nombre, salario y los guarda."""
 
-        self.nombre = None
-        self._salario = None
+        self.nombre = nombre
+        self._salario = salario
+        self.archivo = archivo
         self.lista_gastos = []
 
-        if os.path.exists("usuario_gastos.json"):
+        if os.path.exists(self.archivo):
 
             try:
-                with open("usuario_gastos.json", "r", encoding="utf-8") as archivo:
+                with open(self.archivo, "r", encoding="utf-8") as archivo:
                     datos = json.load(archivo)
-                    self._salario = datos["salario"]
+
+                    if self.nombre is None:
+                        self.nombre = datos.get("nombre")
+
+                    if self._salario is None:
+                        self._salario = datos.get("salario")
+
+
                     self.lista_gastos = [Gasto(d["nombre"], d["precio"], d.get("categoria", "Sin categoria"), d.get("fecha", "Sin fecha")) for d in datos["gastos"]]
-                    self.nombre = datos.get("nombre")
 
             except (json.JSONDecodeError, KeyError, TypeError):
                 print("El archivo esta dañado, se empezara desde cero.")
@@ -125,7 +132,7 @@ class Control_Gasto:
     def guardar(self) -> None:
         """Guarda todo en un archivo json."""
         datos = {"nombre": self.nombre,"salario": self._salario, "gastos": [asdict(gasto) for gasto in self.lista_gastos]}
-        with open("usuario_gastos.json", "w", encoding="utf-8") as archivo:
+        with open(self.archivo, "w", encoding="utf-8") as archivo:
             json.dump(datos, archivo, indent=4, ensure_ascii=False)
 
     def cambiar_salario(self) -> None:
